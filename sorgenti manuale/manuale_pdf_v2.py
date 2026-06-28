@@ -6,9 +6,10 @@ Elettropollo — Manuale utente PDF v2.2
 - Screenshot: schermate TFT SVG convertite in PNG inline
 """
 
-import subprocess, re, io, cairosvg
-from PIL import Image as PILImage
+import subprocess, re, io
 from pypdf import PdfReader, PdfWriter
+from svglib.svglib import svg2rlg
+from reportlab.graphics import renderPDF, renderPM
 
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm, mm
@@ -17,8 +18,9 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT, TA_JUSTIFY
 from reportlab.platypus import (
     SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle,
-    PageBreak, HRFlowable, KeepTogether, Image as RLImage
+    PageBreak, HRFlowable, KeepTogether
 )
+from reportlab.graphics.shapes import Drawing
 from reportlab.platypus.flowables import Flowable
 
 # ── Palette ───────────────────────────────────────────────────────────────────
@@ -153,16 +155,21 @@ SCREENS['splash']      = SPLASH_SVG
 SCREENS['main_open']   = MAIN_OPEN_SVG
 SCREENS['main_closed'] = MAIN_CLOSED_SVG
 
-def svg_to_rl_image(key, display_w_cm, caption=None):
-    """Converte SVG in RLImage ReportLab, con bordo arrotondato via canvas overlay."""
-    svg = SCREENS[key]
-    # Scala 2x per qualità
-    png = cairosvg.svg2png(bytestring=svg.encode(), output_width=480, output_height=640)
-    buf = io.BytesIO(png)
+def svg_to_rl_drawing(key, display_w_cm):
+    """Converte SVG in ReportLab Drawing tramite svglib."""
+    svg_src = SCREENS[key]
+    buf = io.BytesIO(svg_src.encode())
+    drawing = svg2rlg(buf)
+    if drawing is None:
+        return None
     w = display_w_cm * cm
-    h = w * 320 / 240   # aspect ratio TFT
-    img = RLImage(buf, width=w, height=h)
-    return img
+    h = w * 320 / 240
+    sx = w / drawing.width
+    sy = h / drawing.height
+    drawing.width  = w
+    drawing.height = h
+    drawing.transform = (sx, 0, 0, sy, 0, 0)
+    return drawing
 
 def screen_row(keys_captions, display_w_cm=3.8):
     """Genera una riga di schermate affiancate con didascalie."""
@@ -174,16 +181,12 @@ def screen_row(keys_captions, display_w_cm=3.8):
 
     cells = []
     for key, caption in keys_captions:
-        svg = SCREENS[key]
-        png = cairosvg.svg2png(bytestring=svg.encode(), output_width=480, output_height=640)
-        buf = io.BytesIO(png)
-        img = RLImage(buf, width=img_w, height=img_h)
+        drawing = svg_to_rl_drawing(key, display_w_cm)
         cap = Paragraph(caption, ParagraphStyle('sc',
             fontName='Helvetica', fontSize=7.5, textColor=GREY,
             alignment=TA_CENTER, leading=10, spaceAfter=0))
-        cells.append([img, cap])
+        cells.append([drawing or Spacer(img_w, img_h), cap])
 
-    # Tabella: ogni colonna = [immagine, didascalia]
     data = [[c[0] for c in cells], [c[1] for c in cells]]
     ts = TableStyle([
         ('ALIGN', (0,0), (-1,-1), 'CENTER'),
