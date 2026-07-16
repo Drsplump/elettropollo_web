@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>News — Elettropollo</title>
+  <meta name="description" content="Aggiornamenti di sviluppo, note di rilascio e prossime tappe di Elettropollo.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="nav" id="nav">
+    <div class="inner"></div>
+    <div class="wrap">
+      <a class="brand" href="index.html">Elettropollo</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="funzioni.html">Funzioni</a>
+        <a href="storia.html">Storia</a>
+        <a href="news.html" class="active">News</a>
+        <a href="manuale.html">Manuale</a>
+        <a href="contatti.html">Contatti</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="sky-sec" style="padding-top:150px">
+    <div class="sky">
+      <div class="grad-sky"></div>
+      <div class="sun"></div>
+      <div class="cloud c1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 70" preserveAspectRatio="none">
+          <path d="M20 55 Q5 55 5 42 Q5 30 20 30 Q22 14 40 16 Q48 4 64 10 Q78 2 90 14 Q108 8 112 24 Q130 20 132 36 Q148 36 148 50 Q148 58 134 58 Z" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="cloud c2">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 70" preserveAspectRatio="none">
+          <path d="M20 55 Q5 55 5 42 Q5 30 20 30 Q22 14 40 16 Q48 4 64 10 Q78 2 90 14 Q108 8 112 24 Q130 20 132 36 Q148 36 148 50 Q148 58 134 58 Z" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="cloud c3">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 70" preserveAspectRatio="none">
+          <path d="M20 55 Q5 55 5 42 Q5 30 20 30 Q22 14 40 16 Q48 4 64 10 Q78 2 90 14 Q108 8 112 24 Q130 20 132 36 Q148 36 148 50 Q148 58 134 58 Z" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="hills">
+        <div class="hill h1"></div>
+        <div class="hill h2"></div>
+        <div class="hill h3"></div>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Aggiornamenti live</span>
+        <h2>Segui il progetto mentre cresce</h2>
+        <p>Qui raccolgo le novità di sviluppo, i dettagli delle modifiche e le tappe che arrivano per prime.</p>
+      </div>
+      <div class="btn-row" style="margin-top:28px">
+        <a class="btn btn-primary" href="contatti.html">Scrivimi una novità <span class="arr">&rarr;</span></a>
+        <a class="btn btn-ghost" href="manuale.html">Apri il manuale</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow dark">Ultimi aggiornamenti</span>
+        <h2>Presto qui</h2>
+        <p>Questa pagina è pronta per raccogliere i prossimi passi del progetto, in ordine, man mano che arrivano.</p>
+      </div>
+
+      <!--
+        Aggiungi qui le nuove card, una per aggiornamento:
+
+        <div class="timeline reveal" style="display:flex;flex-direction:column;gap:18px;margin-top:40px;max-width:760px">
+          <article class="card" style="border-left:4px solid var(--terra)">
+            <h3>Titolo dell'aggiornamento</h3>
+            <p>Testo dell'aggiornamento.</p>
+          </article>
+        </div>
+      -->
+    </div>
+  </section>
+
+  <footer>
+    <div class="fhills">
+      <div class="hills">
+        <div class="hill h1"></div>
+        <div class="hill h2"></div>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="fbrand">Elettropollo</div>
+      <small>Novità di sviluppo progetto.</small>
+    </div>
+  </footer>
+
+  <script>
+    const nv = document.getElementById("nav");
+    const os = () => {
+      if (scrollY > 40) nv.classList.add("solid");
+      else nv.classList.remove("solid");
+    };
+
+    os();
+    addEventListener("scroll", os, { passive: true });
+
+    const mb = document.getElementById("menuBtn");
+    if (mb) {
+      mb.addEventListener("click", () => {
+        const open = nv.classList.toggle("open");
+        mb.setAttribute("aria-expanded", open);
+      });
+
+      nv.querySelectorAll("nav a").forEach(a => a.addEventListener("click", () => {
+        nv.classList.remove("open");
+        mb.setAttribute("aria-expanded", "false");
+      }));
+    }
+
+    const io = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add("in");
+    }), { threshold: .1 });
+
+    document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
