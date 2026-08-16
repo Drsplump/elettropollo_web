@@ -104,6 +104,17 @@
           <h3>12 agosto 2026 — Sensore NH₃ completato e nuova sonda di temperatura interna</h3>
           <p>Portata a termine l'integrazione del sensore di qualità dell'aria SEN0567, con tempo di riscaldamento gestito automaticamente e soglia di intervento configurabile dal menu. Aggiunta anche una sonda di temperatura dedicata all'interno del pollaio. Le due misure lavorano insieme: la ventola per il ricambio d'aria si accende quando la temperatura interna supera la soglia impostata oppure quando la qualità dell'aria peggiora sotto il limite scelto, e si spegne con un margine di isteresi per evitare accensioni troppo frequenti.</p>
         </article>
+
+        <article class="card" style="border-left:4px solid var(--terra)">
+          <h3>16 agosto 2026 — In arrivo: diagnostica erogazione cibo e acqua</h3>
+          <p>Al lavoro su un nuovo modulo diagnostico basato su un espansore I2C PCF8574T, per verificare che l'erogazione di cibo e acqua vada davvero a buon fine. Un microswitch controllerà il movimento delle pale del cibo e un flussostato la portata dell'acqua: se un ciclo non produce l'evento atteso, il sistema lo segnala e può bloccarlo in attesa di sblocco.</p>
+          <ul style="margin:.7em 0 0 1.1em; padding:0; color:var(--ink); opacity:.82; font-size:1rem">
+            <li>Tre modalità di intervento selezionabili: notifica con blocco e sblocco da display o Telegram, blocco con sblocco solo da display, oppure monitoraggio disattivato.</li>
+            <li>Timeout iniziale e soglia di evento periodico configurabili dal menu.</li>
+            <li>Notifiche di guasto e ripristino su display, Telegram e MQTT/Home Assistant.</li>
+          </ul>
+          <p style="margin-top:.6em"><em>Sviluppo in corso.</em></p>
+        </article>
       </div>
 
       <!--
